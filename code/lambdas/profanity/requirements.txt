@@ -1,0 +1,2 @@
+profanityfilter
+boto3
