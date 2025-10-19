@@ -206,7 +206,12 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 /.idea
-/code/lambdas/preprocess/package
-/code/lambdas/profanity/package
-/code/lambdas/sentiment/package
+lambda/preprocess/package
+lambda/profanity/package
+lambda/sentiment/package
 *.zip
+.env
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform.lock.hcl

@@ -24,7 +24,7 @@ os.makedirs(NLTK_DATA_DIR, exist_ok=True)
 # ==============================================================================
 # AWS SERVICE SETUP FOR SENTIMENT ANALYSIS
 # ==============================================================================
-ENDPOINT = "http://localhost.localstack.cloud:4566" if os.getenv("STAGE") == "local" else None
+ENDPOINT =  None
 
 s3 = boto3.client("s3", endpoint_url=ENDPOINT)
 ssm = boto3.client("ssm", endpoint_url=ENDPOINT)
@@ -51,8 +51,6 @@ def get_parameter(name):
 
 
 # Initialize DynamoDB table connection
-REVIEWS_TABLE_NAME = get_parameter("/app/config/reviews_table")
-reviews_table = dynamodb.Table(REVIEWS_TABLE_NAME)
 
 
 def parse_s3_uri(uri: str):
@@ -141,6 +139,9 @@ def lambda_handler(event, context):
     Returns:
         dict: Processing status response
     """
+    REVIEWS_TABLE_NAME = get_parameter("/app/config/reviews_table")
+    reviews_table = dynamodb.Table(REVIEWS_TABLE_NAME)
+
     # Process each record in the stream event
     for record in event.get("Records", []):
         # Only process new record insertions

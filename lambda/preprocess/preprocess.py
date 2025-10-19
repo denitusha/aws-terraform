@@ -38,8 +38,7 @@ nltk_data_loaded = False
 # LocalStack configuration for local development/testing
 # LocalStack provides local AWS service emulation for development
 endpoint_url = None
-if os.getenv("STAGE") == "local":
-    endpoint_url = "https://localhost.localstack.cloud:4566"
+
 
 # Initialize AWS service clients with optional LocalStack endpoint
 s3 = boto3.client("s3", endpoint_url=endpoint_url)
