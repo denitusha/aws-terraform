@@ -16,11 +16,14 @@ from profanityfilter import ProfanityFilter
 # AWS SERVICE CONFIGURATION FOR PROFANITY CHECKER
 # ==============================================================================
 # Updated LocalStack endpoint for local development
-endpoint_url = "http://localhost.localstack.cloud:4566" if os.getenv("STAGE") == "local" else None
+endpoint_url =  None
 dynamodb = boto3.resource('dynamodb', endpoint_url=endpoint_url)
 ssm = boto3.client('ssm', endpoint_url=endpoint_url)
 s3 = boto3.client('s3', endpoint_url=endpoint_url)
 
+def get_parameter(name):
+    """Retrieve configuration parameter from AWS Systems Manager"""
+    return ssm.get_parameter(Name=name)["Parameter"]["Value"]
 
 def lambda_handler(event, context):
     """
@@ -45,7 +48,8 @@ def lambda_handler(event, context):
     # Initialize profanity detection library
     # ProfanityFilter provides robust detection of inappropriate content
     pf = ProfanityFilter()
-    reviews_table = dynamodb.Table('reviews')
+    REVIEWS_TABLE_NAME = get_parameter("/app/config/reviews_table")
+    reviews_table = dynamodb.Table(REVIEWS_TABLE_NAME)
 
     # Process each stream record
     for record in event['Records']:
